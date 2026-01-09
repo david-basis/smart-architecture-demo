@@ -3,7 +3,6 @@
 from mcp.types import Tool, TextContent
 from typing import Any, Dict, List, Optional
 import json
-import asyncio
 from pathlib import Path
 
 from ..api.client import OnShapeClient
@@ -141,10 +140,7 @@ async def handle_verify_clearance_requirements(arguments: dict[str, Any]) -> lis
         results = []
         
         # Process each clearance pair
-        for i, pair in enumerate(clearance_pairs):
-            # Add delay between requests to avoid rate limiting (except for first request)
-            if i > 0:
-                await asyncio.sleep(1.5)  # 1.5 second delay between requests
+        for pair in clearance_pairs:
             terminal1_name = pair.get("terminal1")
             terminal2_name = pair.get("terminal2")
             pair_desc = pair.get("description", f"{terminal1_name} to {terminal2_name}")
