@@ -1,0 +1,75 @@
+{
+  "document_id": "394aa47131b35eec8c9ea996",
+  "workspace_id": "e7c40af452b8e6b2531d26ee",
+  "element_id": "f769bf4ec3a84f5d9e46ea0c",
+  "part_mappings": {
+    "meter.phaseInTerminal": {
+      "onshape_part_id": "KFDD",
+      "voltage": 230.0,
+      "current": 80.0,
+      "description": "Phase input terminal"
+    },
+    "meter.phaseOutTerminal": {
+      "onshape_part_id": "KFLD",
+      "voltage": 230.0,
+      "current": 80.0,
+      "description": "Phase output terminal"
+    },
+    "meter.neutralInTerminal": {
+      "onshape_part_id": "KFHD",
+      "voltage": 0.0,
+      "current": 80.0,
+      "description": "Neutral input terminal"
+    },
+    "meter.phaseInScrew": {
+      "onshape_part_id": "KFrC",
+      "voltage": 230.0,
+      "current": 80.0,
+      "description": "Phase input screw (Steel Class 8.8)"
+    },
+    "meter.phaseOutScrew": {
+      "onshape_part_id": "KF3C",
+      "voltage": 230.0,
+      "current": 80.0,
+      "description": "Phase output screw (Steel Class 8.8)"
+    },
+    "meter.neutralInScrew": {
+      "onshape_part_id": "KFfC",
+      "voltage": 0.0,
+      "current": 80.0,
+      "description": "Neutral input screw (Steel Class 8.8)"
+    }
+  },
+  "clearance_pairs": [
+    {
+      "terminal1": "meter.phaseInTerminal",
+      "terminal2": "meter.phaseOutTerminal",
+      "description": "Phase in to phase out clearance"
+    },
+    {
+      "terminal1": "meter.phaseInTerminal",
+      "terminal2": "meter.neutralInTerminal",
+      "description": "Phase to neutral clearance"
+    },
+    {
+      "terminal1": "meter.phaseOutTerminal",
+      "terminal2": "meter.neutralInTerminal",
+      "description": "Phase out to neutral in clearance"
+    },
+    {
+      "terminal1": "meter.phaseInScrew",
+      "terminal2": "meter.phaseOutScrew",
+      "description": "Phase in screw to phase out screw clearance"
+    },
+    {
+      "terminal1": "meter.phaseInScrew",
+      "terminal2": "meter.neutralInScrew",
+      "description": "Phase in screw to neutral in screw clearance"
+    },
+    {
+      "terminal1": "meter.phaseOutScrew",
+      "terminal2": "meter.neutralInScrew",
+      "description": "Phase out screw to neutral in screw clearance"
+    }
+  ]
+}
