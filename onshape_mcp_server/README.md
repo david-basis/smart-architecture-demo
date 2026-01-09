@@ -2,10 +2,12 @@
 
 Model Context Protocol (MCP) server for bridging SysML models with OnShape 3D CAD models, enabling model-based verification and validation (MBSE/V&V) for electrical clearance requirements.
 
+> **Note**: This is the MCP server component of the Smart Architecture Demo project. See the [main README](../README.md) for project overview and quick start.
+
 ## Overview
 
 This server provides a bridge between:
-- **SysML Models** (`Gen2Panel1P12.sysml`) - System architecture, requirements, and part definitions
+- **SysML Models** (`../Gen2Panel1P12.sysml`) - System architecture, requirements, and part definitions
 - **OnShape 3D CAD** - Physical geometry and material properties
 - **IEC Standards** - Electrical clearance requirements (IEC 61010-1, IEC 61439-1)
 
