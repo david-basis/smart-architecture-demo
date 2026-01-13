@@ -1,0 +1,36 @@
+stateDiagram-v2
+    [*] --> OPEN : initial
+
+    OPEN --> CLOSING : close_cmd
+    OPEN --> FAULT : fault_detected
+
+    CLOSING --> CLOSED : success
+    CLOSING --> OPEN : failure
+    CLOSING --> FAULT : fault_detected
+
+    CLOSED --> OPENING : open_cmd
+    CLOSED --> FAULT : fault_detected
+
+    OPENING --> OPEN : success
+    OPENING --> FAULT : failure
+    OPENING --> FAULT : fault_detected
+
+    FAULT --> OPEN : reset_cmd
+
+    state OPEN {
+        [*] --> Islanded
+        Islanded : Both poles open
+        Islanded : System isolated from grid
+    }
+
+    state CLOSED {
+        [*] --> GridConnected
+        GridConnected : Both poles closed
+        GridConnected : System connected to grid
+    }
+
+    state FAULT {
+        [*] --> FailSafe
+        FailSafe : Both poles unknown/unsafe
+        FailSafe : Requires manual reset
+    }

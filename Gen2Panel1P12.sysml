@@ -1,4 +1,6 @@
 package Gen2Panel1P12 {
+    private import IECStandards::*;
+
     // =========================================================
     // Items (simple payload types for ports; no external libs)
     // =========================================================
@@ -97,39 +99,27 @@ package Gen2Panel1P12 {
 
     part def SPD_MOV;
     part def SPD_GDT;
-    part def SPD_NE;          // optional N-E SPD (modeled as present)
-
-    // =========================================================
-    // Requirement definitions for electrical clearance
-    // =========================================================
-
-    requirement def ElectricalClearanceReq {
-        id = "REQ-ELECTRICAL-CLEARANCE-001";
-        text = "Electrical parts shall meet minimum clearance requirements based on voltage and current ratings per IEC 61010-1 and IEC 61439-1 standards. Worst case (maximum) clearance is selected from both standards.";
-    }
+    part def SPD_NE;
 
     // =========================================================
     // Physical terminal definitions
     // =========================================================
 
-    part def MeterTerminal {
-        // Physical terminal for busbar connection
-        // 
-        // Attributes (managed via onshape_part_mapping.json):
-        // - voltage: Real (default 230.0 V) - Electrical voltage rating
-        // - current: Real (default 80.0 A) - Electrical current rating
-        // - material: String (synced from OnShape dynamically) - Material type
-        // - minClearance: Real (calculated from voltage/current per IEC standards) - Minimum clearance in mm
-        //
-        // Satisfies:
-        // - ElectricalClearanceReq: Clearance verification per IEC standards
+    part def MeterTerminal :> PartWithPower {
+        doc /*
+         * Physical terminal for busbar connection.
+         * Inherits voltage_V, current_A, insulationType from PartWithPower.
+         * Automatically satisfies ElectricalClearanceReq via inheritance.
+         */
     }
 
     // =========================================================
     // Key subsystem definitions
     // =========================================================
 
-    part def MainsTerminals {
+    part def MainsTerminals :> PartWithPower {
+        doc /* Mains input terminals - carries full mains voltage */
+
         port phaseIn   : PhasePort;   // Phase terminal input
         port phaseOut  : PhasePort;   // Phase terminal output
         port neutralIn : NeutralPort; // Neutral terminal input
@@ -138,7 +128,9 @@ package Gen2Panel1P12 {
         port earthOut  : EarthPort;   // Earth terminal output
     }
 
-    part def SupplyBusbars {
+    part def SupplyBusbars :> PartWithPower {
+        doc /* Main supply busbars - carries full mains voltage */
+
         port phaseIn  : PhasePort;   // Phase input (from grid relay)
         port phaseOut : PhasePort;   // Phase output (to circuits)
         port neutralIn  : NeutralPort; // Neutral input (from grid relay)
@@ -146,10 +138,14 @@ package Gen2Panel1P12 {
     }
 
     part def EarthBusbar {
+        doc /* Earth busbar - no voltage clearance requirement */
+
         port earth : EarthPort;  // Earth busbar for distribution
     }
 
-    part def SurgeProtectionDevice {
+    part def SurgeProtectionDevice :> PartWithPower {
+        doc /* SPD module - handles surge voltages up to rated capacity */
+
         port phaseIn  : PhasePort;   // Phase input
         port phaseOut : PhasePort;   // Phase output
         port neutralIn  : NeutralPort; // Neutral input
@@ -161,7 +157,9 @@ package Gen2Panel1P12 {
         part gdt : SPD_GDT[1];  // Combined GDT and N-E: shunts L->E and N->E
     }
 
-    part def PowerModule {
+    part def PowerModule :> PartWithPower {
+        doc /* Power supply module - mains input, 24V DC output */
+
         port phaseIn  : PhasePort;
         port neutralIn : NeutralPort;
         port earth   : EarthPort;
@@ -182,7 +180,9 @@ package Gen2Panel1P12 {
         port spi       : SPIPort;
     }
 
-    part def IntegratedMeter {
+    part def IntegratedMeter :> PartWithPower {
+        doc /* Integrated energy meter with mains voltage measurement */
+
         port phaseIn  : PhasePort;
         port phaseOut : PhasePort;
         port neutralIn  : NeutralPort;  // Neutral shunt (pass-through, no physical terminal)
@@ -226,7 +226,9 @@ package Gen2Panel1P12 {
         port earth : EarthPort;
     }
 
-    part def ConfigurableMainSwitch {
+    part def ConfigurableMainSwitch :> PartWithPower {
+        doc /* Main switch with RCD and UI - carries full mains voltage */
+
         port phaseIn   : PhasePort;
         port phaseOut  : PhasePort;
         port neutralIn : NeutralPort;
@@ -242,7 +244,9 @@ package Gen2Panel1P12 {
         part statusLed   : StatusLED[1];
     }
 
-    part def GridRelay {
+    part def GridRelay :> PartWithPower {
+        doc /* Grid isolation relay - carries full mains voltage */
+
         port phaseIn  : PhasePort;   // Phase only (neutral passes through separately)
         port phaseOut : PhasePort;
         port neutralIn  : NeutralPort; // Neutral pass-through
@@ -356,7 +360,9 @@ package Gen2Panel1P12 {
         }
     }
 
-    part def CircuitModule {
+    part def CircuitModule :> PartWithPower {
+        doc /* Individual circuit module - carries mains voltage to load */
+
         port phaseIn   : PhasePort;
         port phaseOut  : PhasePort;
         port neutralIn  : NeutralPort;
