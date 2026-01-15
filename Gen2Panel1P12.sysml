@@ -1,4 +1,5 @@
 package Gen2Panel1P12 {
+    private import ScalarValues::Boolean;
     private import IECStandards::*;
 
     // =========================================================
@@ -76,6 +77,17 @@ package Gen2Panel1P12 {
 
     port def DataPort {
         inout item dataframe : DataFrame;
+    }
+
+    port def AuxContactPort {
+        doc /*
+         * Auxiliary contact state feedback from relay poles.
+         * Hardware: Active-low signals (logic level, <100mA).
+         * SysML: Positive logic (true = contact closed, false = contact open).
+         * Both relays are Normally Open (NO) - contacts open when coil de-energized.
+         */
+        out attribute phaseContactClosed : Boolean;    // Phase pole NO contact state
+        out attribute neutralContactClosed : Boolean;  // Neutral pole NO contact state
     }
 
     // =========================================================
@@ -237,6 +249,7 @@ package Gen2Panel1P12 {
 
         port ctrl  : ControlPort;
         port uiSpi : SPIPort;
+        port auxGridRelay : AuxContactPort;  // Receives grid relay auxiliary contact feedback
 
         part rcdCircuit  : RCDCircuit[1];
         part testButton  : TestButton[1];
@@ -255,6 +268,7 @@ package Gen2Panel1P12 {
 
         port ctrl  : ControlPort;
         port status: StatusPort;
+        port auxContact : AuxContactPort;  // Auxiliary contact feedback (NO contacts)
 
         part phasePole    : RelayPole[1];
         part neutralPole  : RelayPole[1];
@@ -496,6 +510,9 @@ package Gen2Panel1P12 {
 
         interface connect (spd.status, manager.stsSpd);
         interface connect (gridRelay.status, manager.stsRelay);
+
+        // Auxiliary contact feedback (grid relay -> main switch)
+        interface connect (gridRelay.auxContact, mainSwitch.auxGridRelay);
     }
 
     // Concrete system instance
